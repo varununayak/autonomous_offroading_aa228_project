@@ -4,6 +4,7 @@ Generates a random change of gradient np array
 '''
 
 import numpy as np
+import matplotlib.pyplot as plt 
 
 '''
 generateRandomPath(lenth)
@@ -34,4 +35,7 @@ def generateRandomPath(length = 100):
 # For debugging only
 if __name__ == "__main__":
    randomPath, stepSize, totalLength = generateRandomPath()
+   #np.savetxt("standardRandomPath.csv", randomPath)
    print(randomPath, stepSize, totalLength)
+   plt.plot(randomPath)
+   plt.show()
