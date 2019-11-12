@@ -1,8 +1,11 @@
+#!usr/bin/env/python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 from pathGenerator import *
 from policyGenerator import *
 from reward import *
+import pandas as pd
 '''
 DATA SAMPLER
 
@@ -31,14 +34,14 @@ def sample_generator(pathData,velocityData):
 	Sp = np.array(Sp)
 
 	DataCombined = np.transpose(np.vstack((S[:,0], S[:,1],A,R,Sp[:, 0], Sp[:, 1])))
-	np.savetxt("samples.csv", DataCombined, delimiter=",")
-
-	# for 
-
-
+	np.savetxt("standardSamples.csv", DataCombined, delimiter=",")
 
 def main():
-	pathData = generateRandomPath()
+	useStandardPath = True
+	if (useStandardPath):
+		pathData = (np.squeeze(pd.read_csv("standardRandomPath.csv")), 1, 100)
+	else:
+		pathData = generateRandomPath()
 	velocityData = generateConstantVelocityProfile(1)
 	sample_generator(pathData,velocityData)
 
