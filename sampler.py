@@ -34,16 +34,18 @@ def sample_generator(pathData,velocityData):
 	Sp = np.array(Sp)
 
 	DataCombined = np.transpose(np.vstack((S[:,0], S[:,1],A,R,Sp[:, 0], Sp[:, 1])))
-	np.savetxt("standardSamples.csv", DataCombined, delimiter=",")
+	np.savetxt(f"Standard/standardSamplesConstantVelocity{velocityData[0]}.csv", DataCombined, delimiter=",")
 
 def main():
 	useStandardPath = True
 	if (useStandardPath):
-		pathData = (np.squeeze(pd.read_csv("standardRandomPath.csv")), 1, 100)
+		pathData = (np.squeeze(pd.read_csv("Standard/standardRandomPath.csv")), 1, 100)
 	else:
 		pathData = generateRandomPath()
-	velocityData = generateConstantVelocityProfile(1)
-	sample_generator(pathData,velocityData)
+	for velocity in range(1,11):
+		velocityData = generateConstantVelocityProfile(velocity)
+		sample_generator(pathData,velocityData)
+	pass
 
 
 if __name__	== "__main__":
