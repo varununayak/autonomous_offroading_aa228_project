@@ -1,4 +1,5 @@
 #Function for the reward model
+import numpy as np
 
 def CalculateReward(Snext_t, Vnext):
 	#Snext_t is the next state vector which has [Del2H, d_goal]
