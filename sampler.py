@@ -28,8 +28,6 @@ def sample_generator(pathData,velocityData):
         R.append(current_reward)
         Sp.append(s_next)
 
-    print(np.shape(S),np.shape(A),np.shape(R),np.shape(Sp))
-
     S = np.array(S)
     Sp = np.array(Sp)
 
