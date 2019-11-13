@@ -30,18 +30,20 @@ def main():
     optimumPolicy = []
     randomPolicy = []
     state = initialState
+    optimumAction = getOptimumAction(qBuilder.getQ(), state)
+    randomAction = np.random.randint(1,10)
     for i in range(1, len(path)):
-        prevState = state
         # Next state
         state = (path[i], state[1]-1)
+        # Compute Rewards for previous action and this state
+        optimumRewards.append(CalculateReward(state, optimumAction))
+        randomRewards.append(CalculateReward(state, randomAction))
         # Get the optimum action given the state
         optimumAction = getOptimumAction(qBuilder.getQ(), state)
         randomAction = np.random.randint(1,10)
+        # For storage of rewards
         optimumPolicy.append(optimumAction)
         randomPolicy.append(randomAction)
-        # Compute Rewards
-        optimumRewards.append(CalculateReward(prevState, optimumAction))
-        randomRewards.append(CalculateReward(prevState, randomAction))
     print("Sum of rewards by following Optimal Policy: ",sum(optimumRewards))
     print("Sum of rewards by following Random Policy: ",sum(randomRewards))
     plt.figure()
