@@ -10,19 +10,18 @@ from getOptimumAction import *
 from reward import *
 import matplotlib.pyplot as plt
 from sampler import generateAndSaveStandardFiles
+from pathGenerator import generateRandomPath
 
 def main():
     # Recreate the standard csvs
     generateAndSaveStandardFiles()
     qBuilder = QBuilder()
     # For each dataset, learn Q(s,a)
-    for i in range(1,11):
-        filename = f"Standard/standardSamplesConstantVelocity{i}.csv"
-        data = np.squeeze(pd.read_csv(filename))
-        qBuilder.learnFromData(data)
-
+    learn(qBuilder)    
     # Get the path to test on
-    path = np.squeeze(pd.read_csv("Standard/standardRandomPath.csv"))
+    #path = np.squeeze(pd.read_csv("Standard/standardRandomPath.csv"))
+    # Get a random path instead
+    path,_,_ = generateRandomPath()
     # Initialize state
     initialState = (path[0], 100)
     optimumRewards = []
@@ -53,6 +52,16 @@ def main():
     plt.legend(["Path Change Of Grads", "Optimum Vel", "Random Vel"])
     plt.show()
 
+def learn(qBuilder):
+    numOfPasses = 10
+    for j in range(numOfPasses):
+        print(f"Learning.... {j/numOfPasses*100}%")
+        for i in range(1,11):
+            filename = f"Standard/standardSamplesConstantVelocity{i}.csv"
+            data = np.squeeze(pd.read_csv(filename))
+            qBuilder.learnFromData(data)
+        pass
+    return
 
 
 
