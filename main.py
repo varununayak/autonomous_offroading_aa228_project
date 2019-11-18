@@ -19,9 +19,7 @@ def main():
     # For each dataset, learn Q(s,a)
     learn(qBuilder)    
     # Get the path to test on
-    #path = np.squeeze(pd.read_csv("Standard/standardRandomPath.csv"))
-    # Get a random path instead
-    path,_,_ = generateRandomPath()
+    path = np.squeeze(pd.read_csv("Test/testRandomPath.csv"))
     # Initialize state
     initialState = (path[0], 100)
     optimumRewards = []
@@ -59,7 +57,7 @@ def learn(qBuilder):
         for i in range(1,101):
             filename = f"Standard/standardSamplesConstantVelocity{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
-            qBuilder.learnFromDataSARSA(data)
+            qBuilder.learnFromDataQLearning(data)
         pass
     return
 
