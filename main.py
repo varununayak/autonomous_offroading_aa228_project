@@ -59,7 +59,7 @@ def learn(qBuilder):
         for i in range(1,11):
             filename = f"Standard/standardSamplesConstantVelocity{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
-            qBuilder.learnFromData(data)
+            qBuilder.learnFromDataQLearning(data)
         pass
     return
 
