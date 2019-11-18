@@ -12,7 +12,7 @@ DATA SAMPLER
 This program take a path and reward function and returns samples to be used for learning
 '''
 
-def sample_generator(pathData,velocityData):
+def sample_generator(pathData,velocityData, saveIdx):
     pathArray,stepSize,totalLength = pathData
     S = []
     A = []
@@ -32,13 +32,17 @@ def sample_generator(pathData,velocityData):
     Sp = np.array(Sp)
 
     DataCombined = np.transpose(np.vstack((S[:,0], S[:,1],A,R,Sp[:, 0], Sp[:, 1])))
-    np.savetxt(f"Standard/standardSamplesConstantVelocity{velocityData[0]}.csv", DataCombined, delimiter=",")
+    np.savetxt(f"Standard/standardSamplesConstantVelocity{saveIdx}.csv", DataCombined, delimiter=",")
 
 def generateAndSaveStandardFiles():
-    pathData = (np.squeeze(pd.read_csv("Standard/standardRandomPath.csv")), 1, 100)
-    for velocity in range(1,11):
-        velocityData = generateConstantVelocityProfile(velocity)
-        sample_generator(pathData,velocityData)
+    saveIdx = 1
+    for i in range(1,11):
+        pathData = (np.squeeze(pd.read_csv(f"Standard/standardRandomPath{i}.csv")), 1, 100)
+        for velocity in range(1,11):
+            velocityData = generateConstantVelocityProfile(velocity)
+            sample_generator(pathData,velocityData, saveIdx)
+            saveIdx += 1
+        pass
     pass
 
 
