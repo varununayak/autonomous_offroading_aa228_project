@@ -47,7 +47,7 @@ def generateAndSaveStandardFiles():
     for i in range(1,11):
         pathData = (np.squeeze(pd.read_csv(f"Standard/standardRandomPath{i}.csv")), 1, 100)
         for velocity in range(1,11):
-            velocityData = generateConstantVelocityProfile(velocity)
+            velocityData = generateRandomVelocityProfile()
             sample_generator(pathData,velocityData, saveIdx)
             saveIdx += 1
         pass

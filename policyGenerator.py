@@ -19,10 +19,13 @@ def generateConstantVelocityProfile(velocityMagnitude, length = 100):
     velocityMagnitude = int(velocityMagnitude)
     return np.multiply(velocityMagnitude, np.ones((length,), dtype = int))
 
-#def generateRandomVelocityProfile()
+def generateRandomVelocityProfile(length = 100):
+    minVel = 1
+    maxVel = 10
+    return np.random.randint(minVel, maxVel, length)
 
 # For debugging only
 if __name__ == "__main__":
-    print(generateConstantVelocityProfile(4))
+    print(generateRandomVelocityProfile())
 
 
