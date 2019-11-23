@@ -10,8 +10,8 @@ def CalculateReward(Snext_t, Vnext):
     d_goal = Snext_t[1]
     Del2H = Snext_t[0]
     if (usingKshitijsFunction):
-        a1 = 0.4
-        a2 = .9
+        a1 = 0.5
+        a2 = 2.0
         reward = a1*d_goal*np.abs(Vnext) - (a2*np.abs(Del2H))/np.abs(Vnext)
     else:
         a1 = 0.05

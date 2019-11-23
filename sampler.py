@@ -20,13 +20,21 @@ def sample_generator(pathData,velocityData, saveIdx):
     Sp = []
 
     for index in range(len(pathArray)-1):
-        s_next = [pathArray[index+1],(totalLength-((index+1)*stepSize))]
-        v_next = velocityData[index+1]
-        current_reward = CalculateReward(s_next, v_next)
-        S.append([pathArray[index],(totalLength-((index)*stepSize))])
-        A.append(velocityData[index+1])
-        R.append(current_reward)
-        Sp.append(s_next)
+        # Bin the d2Goal before adding to state
+        d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
+        # Create next state
+        sNext = [pathArray[index+1], d2GoalBinnedNext]
+        # Current velocity 
+        vCurrent = velocityData[index]
+        # Compute reward given current desired velocity (which is next actual velocity) THIS WILL CHANGE in future
+        nextReward = CalculateReward(sNext, vCurrent)
+        # Bin the d2Goal before adding to state
+        d2GoalBinned = int(round((totalLength-((index)*stepSize))/10))
+        # Append all required variables to list
+        S.append([pathArray[index], d2GoalBinned])
+        A.append(vCurrent)
+        R.append(nextReward)
+        Sp.append(sNext)
 
     S = np.array(S)
     Sp = np.array(Sp)
