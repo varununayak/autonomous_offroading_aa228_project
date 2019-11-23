@@ -32,9 +32,12 @@ def main():
     # Get first action
     optimumAction = getOptimumAction(qBuilder.getQ(), state)
     randomAction = np.random.randint(1,10)
+    totalLength = 100
+    stepSize = 1
     for i in range(1, len(path)):
         # Bin the d2goal i.e mapping from (100,1) to (10,1)
-        d2GoalBinned = int(round((state[1] - 1)/10))
+        d2GoalBinned = int(round((totalLength-((i)*stepSize))/10))
+        print(d2GoalBinned)
         # Next state
         state = (path[i], d2GoalBinned)
         # Compute Rewards for PREVIOUS action and this state since previous actions is current velocity (this will change)
@@ -59,7 +62,7 @@ def main():
     plt.show()
 
 def learn(qBuilder):
-    numOfPasses = 3
+    numOfPasses = 10
     for j in range(numOfPasses):
         print(f"Learning.... {j/numOfPasses*100}%")
         for i in range(1,101):
