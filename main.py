@@ -37,7 +37,6 @@ def main():
     for i in range(1, len(path)):
         # Bin the d2goal i.e mapping from (100,1) to (10,1)
         d2GoalBinned = int(round((totalLength-((i)*stepSize))/10))
-        print(d2GoalBinned)
         # Next state
         state = (path[i], d2GoalBinned)
         # Compute Rewards for PREVIOUS action and this state since previous actions is current velocity (this will change)
