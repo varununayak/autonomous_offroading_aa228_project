@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from pathGenerator import *
 from policyGenerator import *
 from reward import *
+import random
 import pandas as pd
 '''
 DATA SAMPLER
@@ -53,6 +54,11 @@ def generateAndSaveStandardFiles():
         pass
     pass
 
+def getNextVelocity(V, Vdes):
+	cap_range = 2 		#+/- range to cap velocity
+	new_V = np.clip(Vdes, a_min = V - cap_range, a_max = V + cap_range)
+	noise = random.randint(-1,1)
+	return (new_V + noise)
 
 def main():
     generateAndSaveStandardFiles()
