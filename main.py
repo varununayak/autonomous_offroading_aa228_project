@@ -30,15 +30,15 @@ def main():
     optimumVelocity = []
     randomVelocity = []
     # Initialize state before testing 
-    initialState = [0, int(round(path[0])), 10]
+    initialState = [0, int(round(path[0])), int(round(path[1])), 10]
     s = initialState
     # Simulate for Optimum Policy
-    for index in range(1, len(path) - 1):
+    for index in range(1, len(path) - 2):
         a = getOptimumAction(qBuilder.getQ(), s)
          # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
         # Compute next state (next velocity is a result of current velocity and current action)
-        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), d2GoalBinnedNext]
+        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
         r = CalculateReward(s, a)
         s = sNext
         optimumRewards.append(r)
@@ -46,12 +46,12 @@ def main():
         optimumVelocity.append(s[0])
     # Simulate for Random Policy
     s = initialState
-    for index in range(1, len(path) - 1):
+    for index in range(1, len(path) - 2):
         a = np.random.randint(1,10)
          # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
         # Compute next state (next velocity is a result of current velocity and current action)
-        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), d2GoalBinnedNext]
+        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
         r = CalculateReward(s, a)
         s = sNext
         randomRewards.append(r)
@@ -75,7 +75,7 @@ def learn(qBuilder):
     numOfPasses = 4
     for j in range(numOfPasses):
         print(f"Learning.... {j/numOfPasses*100}%")
-        for i in range(1,101):
+        for i in range(1,201):
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
             qBuilder.learnFromDataSARSA(data)

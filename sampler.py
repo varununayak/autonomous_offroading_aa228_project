@@ -20,15 +20,15 @@ def sample_generator(pathData,velocityData, saveIdx):
     R = []
     Sp = []
 
-    # State format = [velocity, thisGradient, d2GoalBinned]
-    initialState = [0, pathArray[0], 10]    # Start with zero velocity
+    # State format = [velocity, thisGradient, nextGradient, d2GoalBinned]
+    initialState = [0, pathArray[0], pathArray[1], 10]    # Start with zero velocity
     s = initialState
-    for index in range(len(pathArray) - 1):
+    for index in range(len(pathArray) - 2):
         a = velocityData[index]
          # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
         # Compute next state (next velocity is a result of current velocity and current action)
-        sNext = [getNextVelocity(s[0], a), pathArray[index + 1], d2GoalBinnedNext]
+        sNext = [getNextVelocity(s[0], a), pathArray[index + 1], pathArray[index + 2], d2GoalBinnedNext]
         r = CalculateReward(s, a) 
         S.append(s)
         A.append(a)
@@ -40,7 +40,7 @@ def sample_generator(pathData,velocityData, saveIdx):
     S = np.array(S)
     Sp = np.array(Sp)
 
-    DataCombined = np.transpose(np.vstack((S[:,0], S[:,1], S[:,2],A,R,Sp[:,0], Sp[:,1], Sp[:,2])))
+    DataCombined = np.transpose(np.vstack((S[:,0],S[:,1],S[:,2],S[:,3],A,R,Sp[:,0],Sp[:,1],Sp[:,2],Sp[:,3])))
     np.savetxt(f"Standard/standardSamples{saveIdx}.csv", DataCombined, delimiter=",")
 
 def generateAndSaveStandardFiles():
