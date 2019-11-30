@@ -1,20 +1,16 @@
 #Function for the reward model
 import numpy as np
 
-def CalculateReward(Snext_t, Vnext):
-    '''
-    Snext_t is the next state vector which has [Del2H, d_goal]
-    Vnext is the action at step t
-    Weights for the terms in reward '''
+def CalculateReward(s, a):
     usingKshitijsFunction = True
-    d_goal = Snext_t[2]
-    Del2H = Snext_t[1]
+    d_goal = s[2]
+    Del2H = s[1]
     if (usingKshitijsFunction):
         a1 = 0.5
         a2 = 0.9
-        reward = a1*d_goal*np.abs(Vnext) - (a2*np.abs(Del2H))/np.abs(Vnext)
+        reward = a1*d_goal*np.abs(a) - (a2*np.abs(Del2H))*np.abs(a)
     else:
         a1 = 0.05
         a2 = 0.5
-        reward = a1*d_goal*np.abs(Vnext) + a2*Del2H/np.abs(Vnext)
+        reward = a1*d_goal*np.abs(a) + a2*Del2H/np.abs(a)
     return reward
