@@ -78,7 +78,7 @@ def learn(qBuilder):
         for i in range(1,101):
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
-            qBuilder.learnFromDataSARSA(data)
+            qBuilder.learnFromDataQLearning(data)
         pass
     return
 
