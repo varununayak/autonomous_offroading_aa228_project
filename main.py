@@ -75,7 +75,7 @@ def learn(qBuilder):
     numOfPasses = 4
     for j in range(numOfPasses):
         print(f"Learning.... {j/numOfPasses*100}%")
-        for i in range(1,201):
+        for i in range(1,101):
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
             qBuilder.learnFromDataSARSA(data)
