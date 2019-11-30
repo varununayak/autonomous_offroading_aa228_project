@@ -20,28 +20,28 @@ def sample_generator(pathData,velocityData, saveIdx):
     R = []
     Sp = []
 
-    for index in range(len(pathArray)-1):
-        # Bin the d2Goal before adding to state
+    # State format = [velocity, thisGradient, d2GoalBinned]
+    initialState = [0, pathArray[0], 10]    # Start with zero velocity
+    s = initialState
+    for index in range(len(pathArray) - 1):
+        a = velocityData[index]
+         # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
-        # Create next state
-        sNext = [pathArray[index+1], d2GoalBinnedNext]
-        # Current velocity 
-        vCurrent = velocityData[index]
-        # Compute reward given current desired velocity (which is next actual velocity) THIS WILL CHANGE in future
-        nextReward = CalculateReward(sNext, vCurrent)
-        # Bin the d2Goal before adding to state
-        d2GoalBinned = int(round((totalLength-((index)*stepSize))/10))
-        # Append all required variables to list
-        S.append([pathArray[index], d2GoalBinned])
-        A.append(vCurrent)
-        R.append(nextReward)
+        # Compute next state (next velocity is a result of current velocity and current action)
+        sNext = [getNextVelocity(s[0], a), pathArray[index + 1], d2GoalBinnedNext]
+        r = CalculateReward(s, a) 
+        S.append(s)
+        A.append(a)
+        R.append(r)
         Sp.append(sNext)
+        # Set s to sNext before next iteration
+        s = sNext
 
     S = np.array(S)
     Sp = np.array(Sp)
 
-    DataCombined = np.transpose(np.vstack((S[:,0], S[:,1],A,R,Sp[:, 0], Sp[:, 1])))
-    np.savetxt(f"Standard/standardSamplesConstantVelocity{saveIdx}.csv", DataCombined, delimiter=",")
+    DataCombined = np.transpose(np.vstack((S[:,0], S[:,1], S[:,2],A,R,Sp[:,0], Sp[:,1], Sp[:,2])))
+    np.savetxt(f"Standard/standardSamples{saveIdx}.csv", DataCombined, delimiter=",")
 
 def generateAndSaveStandardFiles():
     saveIdx = 1
@@ -58,7 +58,7 @@ def getNextVelocity(V, Vdes):
 	cap_range = 2 		#+/- range to cap velocity
 	new_V = np.clip(Vdes, a_min = V - cap_range, a_max = V + cap_range)
 	noise = random.randint(-1,1)
-	return (new_V + noise)
+	return np.clip(new_V + noise, a_min = 1, a_max = 10)
 
 def main():
     generateAndSaveStandardFiles()
