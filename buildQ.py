@@ -18,7 +18,7 @@ class QBuilder(object):
             return self.Q[(s, a)]
         pass
 
-    def learnFromDataSARSA(self, data, num_iters=100, alpha=0.5, gamma=0.7):
+    def learnFromDataSARSA(self, data, num_iters = 100, alpha=0.5, gamma=0.7):
         s_t = np.zeros(4, dtype=int)
         s_p = np.zeros(4, dtype=int)
         for k in range(num_iters):

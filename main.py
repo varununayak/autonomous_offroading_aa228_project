@@ -11,6 +11,7 @@ from reward import *
 import matplotlib.pyplot as plt
 from sampler import generateAndSaveStandardFiles, getNextVelocity
 from pathGenerator import generateRandomPath
+from params import *
 
 def main():
     # Recreate the standard csvs
@@ -20,8 +21,8 @@ def main():
     learn(qBuilder)    
     # Get the path to test on
     path = np.squeeze(pd.read_csv("Test/testRandomPath.csv"))
-    totalLength = 100
-    stepSize = 1
+    totalLength = PATH_LENGTH
+    stepSize = PATH_STEP_SIZE
     # Initialize policy and rewards collected to store and compare
     optimumRewards = []
     randomRewards = []
@@ -30,13 +31,13 @@ def main():
     optimumVelocity = []
     randomVelocity = []
     # Initialize state before testing 
-    initialState = [0, int(round(path[0])), int(round(path[1])), 10]
+    initialState = [0, int(round(path[0])), int(round(path[1])), D2GOAL_BIN_RES]
     s = initialState
     # Simulate for Optimum Policy
     for index in range(1, len(path) - 2):
         a = getOptimumAction(qBuilder.getQ(), s)
          # Bin the d2Goal before adding to state
-        d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
+        d2GoalBinnedNext = int(round((totalLength-((index + 1)*stepSize))/D2GOAL_BIN_RES))
         # Compute next state (next velocity is a result of current velocity and current action)
         sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
         r = CalculateReward(s, a)
@@ -47,9 +48,9 @@ def main():
     # Simulate for Random Policy
     s = initialState
     for index in range(1, len(path) - 2):
-        a = np.random.randint(1,10)
+        a = np.random.randint(MIN_VEL,MAX_VEL)
          # Bin the d2Goal before adding to state
-        d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/10))
+        d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/D2GOAL_BIN_RES))
         # Compute next state (next velocity is a result of current velocity and current action)
         sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
         r = CalculateReward(s, a)
@@ -72,10 +73,10 @@ def main():
     plt.show()
 
 def learn(qBuilder):
-    numOfPasses = 4
+    numOfPasses = NUM_PASSES_FOR_LEARNING
     for j in range(numOfPasses):
-        print(f"Learning.... {j/numOfPasses*100}%")
-        for i in range(1,101):
+        for i in range(1, NUM_TRAINING_SETS + 1):
+            print(f"Learning.... {(i + 1)*(j + 1)/NUM_TRAINING_SETS/NUM_PASSES_FOR_LEARNING*100}%")
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
             qBuilder.learnFromDataQLearning(data)

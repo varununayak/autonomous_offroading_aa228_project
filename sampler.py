@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathGenerator import *
 from policyGenerator import *
+from params import *
 from reward import *
 import random
 import pandas as pd
@@ -21,7 +22,7 @@ def sample_generator(pathData,velocityData, saveIdx):
     Sp = []
 
     # State format = [velocity, thisGradient, nextGradient, d2GoalBinned]
-    initialState = [0, pathArray[0], pathArray[1], 10]    # Start with zero velocity
+    initialState = [0, pathArray[0], pathArray[1], D2GOAL_BIN_RES]    # Start with zero velocity
     s = initialState
     for index in range(len(pathArray) - 2):
         a = velocityData[index]
@@ -45,9 +46,9 @@ def sample_generator(pathData,velocityData, saveIdx):
 
 def generateAndSaveStandardFiles():
     saveIdx = 1
-    for i in range(1,11):
-        pathData = (np.squeeze(pd.read_csv(f"Standard/standardRandomPath{i}.csv")), 1, 100)
-        for velocity in range(1,11):
+    for i in range(1,NUM_RANDOM_PATHS + 1):
+        pathData = (np.squeeze(pd.read_csv(f"Standard/standardRandomPath{i}.csv")), PATH_STEP_SIZE, PATH_LENGTH)
+        for velocity in range(1,NUM_RANDOM_VELOCITY_PROFILES + 1):
             velocityData = generateRandomVelocityProfile()
             sample_generator(pathData,velocityData, saveIdx)
             saveIdx += 1
@@ -57,8 +58,8 @@ def generateAndSaveStandardFiles():
 def getNextVelocity(V, Vdes):
 	cap_range = 2 		#+/- range to cap velocity
 	new_V = np.clip(Vdes, a_min = V - cap_range, a_max = V + cap_range)
-	noise = random.randint(-1,1)
-	return np.clip(new_V + noise, a_min = 1, a_max = 10)
+	noise = random.randint(-VELOCITY_DYNAMICS_NOISE_AMP, VELOCITY_DYNAMICS_NOISE_AMP)
+	return np.clip(new_V + noise, a_min = MIN_VEL, a_max = MAX_VEL)
 
 def main():
     generateAndSaveStandardFiles()
