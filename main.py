@@ -61,6 +61,7 @@ def main():
     # Print and plot results
     print("Sum of rewards by following Optimal Policy: ",sum(optimumRewards))
     print("Sum of rewards by following Random Policy: ",sum(randomRewards))
+    print(f"Improvement : {(sum(optimumRewards) - sum(randomRewards))/sum(randomRewards)}")
     plt.figure()
     plt.subplot(2,1,1)
     plt.plot(path)
