@@ -76,7 +76,8 @@ def learn(qBuilder):
     numOfPasses = NUM_PASSES_FOR_LEARNING
     for j in range(numOfPasses):
         for i in range(1, NUM_TRAINING_SETS + 1):
-            print(f"Learning.... {(i + 1)*(j + 1)/NUM_TRAINING_SETS/NUM_PASSES_FOR_LEARNING*100}%")
+            percentageComplete = (i + 1)*(j + 1)/NUM_TRAINING_SETS/NUM_PASSES_FOR_LEARNING*100
+            print(f"Learning.... {'%.2f' % percentageComplete}%", end="\r")
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
             qBuilder.learnFromDataQLearning(data)
