@@ -21,7 +21,7 @@ totalLength (default is 100)
 def generateRandomPath(length = PATH_LENGTH):
     minHeight = PATH_MIN_HEIGHT
     maxHeight = PATH_MAX_HEIGHT # implies that max change of gradient can be 2 times this value
-    stepSize = STEP_SIZE
+    stepSize = PATH_STEP_SIZE
     totalLength = length
     heights = np.random.randint(minHeight, maxHeight, length + 2)
     gradients = np.zeros((length + 1,), dtype = int)
