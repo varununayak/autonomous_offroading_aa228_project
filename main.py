@@ -16,7 +16,7 @@ from params import *
 def main():
     # Recreate the standard csvs
     generateAndSaveStandardFiles()
-    qBuilder = QBuilder()
+    qBuilder = QBuilderModelBased()
     # For each dataset, learn Q(s,a)
     learn(qBuilder)    
     # Get the path to test on
@@ -81,7 +81,7 @@ def learn(qBuilder):
             print(f"Learning.... {'%.2f' % percentageComplete}%", end="\r")
             filename = f"Standard/standardSamples{i}.csv"
             data = np.squeeze(pd.read_csv(filename))
-            qBuilder.learnFromDataQLearning(data)
+            qBuilder.learnFromData(data)
         pass
     return
 
