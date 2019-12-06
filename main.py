@@ -31,29 +31,31 @@ def main():
     optimumVelocity = []
     randomVelocity = []
     # Initialize state before testing 
-    initialState = [0, int(round(path[0])), int(round(path[1])), D2GOAL_BIN_RES]
+    initialState = [0, int(round(path[0])), int(round(path[1])),int(round(path[2])), D2GOAL_BIN_RES]
     s = initialState
     # Simulate for Optimum Policy
-    for index in range(1, len(path) - 2):
+    for index in range(1, len(path) - 3):
         a = getOptimumAction(qBuilder.getQ(), s)
          # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index + 1)*stepSize))/D2GOAL_BIN_RES))
         # Compute next state (next velocity is a result of current velocity and current action)
-        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
-        r = CalculateReward(s, a)
+        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])),int(round(path[index + 3])), d2GoalBinnedNext]
+        aNext = getOptimumAction(qBuilder.getQ(), sNext)
+        r = CalculateReward(s, a,aNext)
         s = sNext
         optimumRewards.append(r)
         optimumPolicy.append(a)
         optimumVelocity.append(s[0])
     # Simulate for Random Policy
     s = initialState
-    for index in range(1, len(path) - 2):
+    for index in range(1, len(path) - 3):
         a = np.random.randint(MIN_VEL,MAX_VEL)
+        aNext = np.random.randint(MIN_VEL,MAX_VEL)
          # Bin the d2Goal before adding to state
         d2GoalBinnedNext = int(round((totalLength-((index+1)*stepSize))/D2GOAL_BIN_RES))
         # Compute next state (next velocity is a result of current velocity and current action)
-        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])), d2GoalBinnedNext]
-        r = CalculateReward(s, a)
+        sNext = [getNextVelocity(s[0], a), int(round(path[index + 1])), int(round(path[index + 2])),int(round(path[index + 3])), d2GoalBinnedNext]
+        r = CalculateReward(s, a ,aNext)
         s = sNext
         randomRewards.append(r)
         randomPolicy.append(a)
