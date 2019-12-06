@@ -44,7 +44,7 @@ class QBuilder(object):
 			pass
 		return maxQOverA            
 	
-	def learnFromDataQLearning(self, data, num_iters=200, alpha=0.5, gamma=0.7):
+	def learnFromDataQLearning(self, data, num_iters=100, alpha=0.5, gamma=0.7):
 		s_t = np.zeros(5, dtype=int)
 		s_p = np.zeros(5, dtype=int)
 		for k in range(num_iters):
